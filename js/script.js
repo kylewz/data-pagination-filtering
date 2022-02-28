@@ -51,9 +51,33 @@ This function will create and insert/append the elements needed for the paginati
 */
 function paginateList( list ) {
    let numOfPages = Math.ceil(list.length / itemsPerPage);
-
+   
    console.log('We will need ' + numOfPages + ' pages');
+
+   let paginationHTML = document.querySelector('ul.link-list');
+   paginationHTML.innerHTML = '';
+
+   for(let i = 1; i <= numOfPages; i++) {
+      paginationHTML.insertAdjacentHTML('beforeend',`
+         <li>
+            <button type="button">${i}</button>
+         </li>
+      `)
+   }
+
+   let firstButton = paginationHTML.firstElementChild.firstElementChild;
+   firstButton.className = 'active';
+
+   paginationHTML.addEventListener('click',(e) => {
+      console.log(e.target);
+      if( e.target.tagName === 'BUTTON') {
+         const clickedPageNum = e.target.innerHTML;
+         showPage(data,clickedPageNum);
+      }
+   })
 }
 
 
 // Call functions
+showPage(data, 1);
+paginateList(data);
