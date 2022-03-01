@@ -65,14 +65,20 @@ function paginateList( list ) {
       `)
    }
 
-   let firstButton = paginationHTML.firstElementChild.firstElementChild;
-   firstButton.className = 'active';
+   const firstPageButton = paginationHTML.firstElementChild.firstElementChild;
+   let currentPageButton = firstPageButton;
+   currentPageButton.className = 'active';
 
    paginationHTML.addEventListener('click',(e) => {
-      console.log(e.target);
+      const clickedPageButton = e.target;
+
       if( e.target.tagName === 'BUTTON') {
          const clickedPageNum = e.target.innerHTML;
          showPage(data,clickedPageNum);
+         
+         currentPageButton.className = '';
+         clickedPageButton.className = 'active';
+         currentPageButton = clickedPageButton;
       }
    })
 }
