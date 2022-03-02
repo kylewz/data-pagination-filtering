@@ -28,7 +28,8 @@ function showPage( list, page ) {
    for(let i = 0; i < list.length; i++) {
       if(i >= startIndex && i < endIndex) {
          studentList.insertAdjacentHTML("beforeend",
-            `<li class="student-item cf">
+            `
+            <li class="student-item cf">
                <div class="student-details">
                   <img class="avatar" src=${list[i].picture.large} alt="Profile Picture">
                   <h3>${list[i].name.first} ${list[i].name.last}</h3>
@@ -58,11 +59,13 @@ function paginateList( list ) {
    paginationHTML.innerHTML = '';
 
    for(let i = 1; i <= numOfPages; i++) {
-      paginationHTML.insertAdjacentHTML('beforeend',`
-         <li>
-            <button type="button">${i}</button>
-         </li>
-      `)
+      paginationHTML.insertAdjacentHTML('beforeend',
+      `
+      <li>
+         <button type="button">${i}</button>
+      </li>
+      `
+      )
    }
 
    const firstPageButton = paginationHTML.firstElementChild.firstElementChild;
@@ -87,3 +90,15 @@ function paginateList( list ) {
 // Call functions
 showPage(data, 1);
 paginateList(data);
+
+// Add search bar
+const headerTitle = document.querySelector('h2');
+headerTitle.insertAdjacentHTML("afterend",
+   `
+   <label for="search" class="student-search">
+      <span>Search by name</span>
+      <input id="search" placeholder="Search by name...">
+      <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+   </label>
+   `
+);
