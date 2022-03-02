@@ -77,13 +77,39 @@ function paginateList( list ) {
 
       if( e.target.tagName === 'BUTTON') {
          const clickedPageNum = e.target.innerHTML;
-         showPage(data,clickedPageNum);
+         showPage( data, clickedPageNum );
          
          currentPageButton.className = '';
          clickedPageButton.className = 'active';
          currentPageButton = clickedPageButton;
       }
    })
+}
+function generateFullName( firstName, lastName ) {
+   return firstName + ' ' + lastName;
+}
+
+function createListOfFullNames( studentList ) {
+   let listOfFullNames = [];
+   
+   for( const student of studentList) {
+      let fullName = generateFullName( student.name.first, student.name.last);
+      fullName = fullName.toLowerCase();
+      listOfFullNames.push(fullName);
+   }
+
+   return listOfFullNames;
+}
+
+function searchAndFilterNames( listOfNames, searchString ) {
+   searchString = searchString.toLowerCase();
+   let filteredNameList = [];
+
+   for (const fullName of listOfNames){
+      if(searchString.length !== 0 && fullName.includes(searchString) )
+         filteredNameList.push(fullName);
+   }
+   return filteredNameList;
 }
 
 
