@@ -85,31 +85,21 @@ function paginateList( list ) {
       }
    })
 }
-function generateFullName( firstName, lastName ) {
-   return firstName + ' ' + lastName;
-}
 
-function createListOfFullNames( studentList ) {
-   let listOfFullNames = [];
+
+function searchAndFilterNames( studentList, searchString ) {
    
-   for( const student of studentList) {
-      let fullName = generateFullName( student.name.first, student.name.last);
-      fullName = fullName.toLowerCase();
-      listOfFullNames.push(fullName);
+   if( searchString !== '' && studentList.length !== 0 ) {
+      searchString = searchString.toLowerCase();
+      let filteredNameList = [];
+
+      for (let i = 0; i < studentList.length; i++) {
+         
+         
+      
+      return filteredNameList;
+      }
    }
-
-   return listOfFullNames;
-}
-
-function searchAndFilterNames( listOfNames, searchString ) {
-   searchString = searchString.toLowerCase();
-   let filteredNameList = [];
-
-   for (const fullName of listOfNames){
-      if(searchString.length !== 0 && fullName.includes(searchString) )
-         filteredNameList.push(fullName);
-   }
-   return filteredNameList;
 }
 
 
