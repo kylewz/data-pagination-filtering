@@ -77,7 +77,7 @@ function paginateList( list ) {
 
       if( e.target.tagName === 'BUTTON') {
          const clickedPageNum = e.target.innerHTML;
-         showPage( data, clickedPageNum );
+         showPage( list, clickedPageNum );
          
          currentPageButton.className = '';
          clickedPageButton.className = 'active';
@@ -89,16 +89,22 @@ function paginateList( list ) {
 
 function searchAndFilterNames( studentList, searchString ) {
    
-   if( searchString !== '' && studentList.length !== 0 ) {
+   if( (searchString !== '') && (studentList.length !== 0) ) {
       searchString = searchString.toLowerCase();
       let filteredNameList = [];
 
       for (let i = 0; i < studentList.length; i++) {
-         
-         
-      
-      return filteredNameList;
+        const firstName = studentList[i].name.first.toLowerCase();
+        const lastName = studentList[i].name.last.toLowerCase();
+        
+         if( firstName.includes(searchString) || lastName.includes(searchString) )
+            filteredNameList.push( studentList[i] );   
       }
+      return filteredNameList;
+   }
+
+   else {
+      return studentList;
    }
 }
 
@@ -114,7 +120,17 @@ headerTitle.insertAdjacentHTML("afterend",
    <label for="search" class="student-search">
       <span>Search by name</span>
       <input id="search" placeholder="Search by name...">
-      <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+      <button type="button" id="search-button"><img src="img/icn-search.svg" alt="Search icon"></button>
    </label>
    `
 );
+
+const searchButton = document.getElementById('search-button');
+const searchInput = document.getElementById('search');
+
+searchButton.addEventListener('click', () => {
+   const searchResults = searchAndFilterNames(data, searchInput.value.toLowerCase() );
+
+   showPage(searchResults, 1);
+   paginateList(searchResults);
+})
