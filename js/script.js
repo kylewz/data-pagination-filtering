@@ -87,25 +87,34 @@ function paginateList( list ) {
 }
 
 
-function searchAndFilterNames( studentList, searchString ) {
+function searchAndFilterNames( listToSearch, searchString ) {
    
-   if( (searchString !== '') && (studentList.length !== 0) ) {
+   if( (searchString !== '') && (listToSearch.length !== 0) ) {
       searchString = searchString.toLowerCase();
       let filteredNameList = [];
 
-      for (let i = 0; i < studentList.length; i++) {
-        const firstName = studentList[i].name.first.toLowerCase();
-        const lastName = studentList[i].name.last.toLowerCase();
+      for (let i = 0; i < listToSearch.length; i++) {
+        const firstName = listToSearch[i].name.first.toLowerCase();
+        const lastName = listToSearch[i].name.last.toLowerCase();
         
          if( firstName.includes(searchString) || lastName.includes(searchString) )
-            filteredNameList.push( studentList[i] );   
+            filteredNameList.push( listToSearch[i] );   
       }
       return filteredNameList;
    }
 
    else {
-      return studentList;
+      return listToSearch;
    }
+}
+
+function displaySearchResultsList ( searchResults ) {
+   if(searchResults.length === 0)
+      console.log('No Results Found');
+   
+   showPage( searchResults, 1 );
+   paginateList( searchResults );
+   
 }
 
 
@@ -130,7 +139,10 @@ const searchInput = document.getElementById('search');
 
 searchButton.addEventListener('click', () => {
    const searchResults = searchAndFilterNames(data, searchInput.value.toLowerCase() );
+   displaySearchResultsList( searchResults );
+})
 
-   showPage(searchResults, 1);
-   paginateList(searchResults);
+searchInput.addEventListener('keyup', ()=> {
+   const searchResults = searchAndFilterNames(data, searchInput.value.toLowerCase() );
+   displaySearchResultsList( searchResults );
 })
