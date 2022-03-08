@@ -3,21 +3,16 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 
-
-
 /*
 For assistance:
    Check out the "Project Resources" section of the Instructions tab: https://teamtreehouse.com/projects/data-pagination-and-filtering#instructions
    Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
 */
+
+// Set number of student profiles to display per page
 const itemsPerPage = 9;
 
-
-/*
-Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
-*/
-
+// Creates and displays page with a list of students with profile picture, full name, email, and join date.
 function showPage( list, page ) {
    const startIndex = (page * itemsPerPage) - itemsPerPage;
    const endIndex = page * itemsPerPage;
@@ -25,6 +20,7 @@ function showPage( list, page ) {
 
    studentList.innerHTML = '';
 
+   // Looping to add each student and their info to HTML
    for(let i = 0; i < list.length; i++) {
       if(i >= startIndex && i < endIndex) {
          studentList.insertAdjacentHTML("beforeend",
@@ -46,47 +42,46 @@ function showPage( list, page ) {
 }
 
 
-/*
-Create the `addPagination` function
-This function will create and insert/append the elements needed for the pagination buttons
-*/
+// Creates and displays interactive page buttons based on size of given list. 
 function paginateList( list ) {
-   let numOfPages = Math.ceil(list.length / itemsPerPage);
+   let numOfPages = Math.ceil( list.length / itemsPerPage );
    
-   console.log('We will need ' + numOfPages + ' pages');
-
    let paginationHTML = document.querySelector('ul.link-list');
    paginationHTML.innerHTML = '';
 
-   for(let i = 1; i <= numOfPages; i++) {
-      paginationHTML.insertAdjacentHTML('beforeend',
-      `
-      <li>
-         <button type="button">${i}</button>
-      </li>
-      `
-      )
-   }
-
-   const firstPageButton = paginationHTML.firstElementChild.firstElementChild;
-   let currentPageButton = firstPageButton;
-   currentPageButton.className = 'active';
-
-   paginationHTML.addEventListener('click',(e) => {
-      const clickedPageButton = e.target;
-
-      if( e.target.tagName === 'BUTTON') {
-         const clickedPageNum = e.target.innerHTML;
-         showPage( list, clickedPageNum );
-         
-         currentPageButton.className = '';
-         clickedPageButton.className = 'active';
-         currentPageButton = clickedPageButton;
+   if( numOfPages !== 0 ) {
+      for( let i = 1; i <= numOfPages; i++ ) {
+         paginationHTML.insertAdjacentHTML('beforeend',
+         `
+         <li>
+            <button type="button">${i}</button>
+         </li>
+         `
+         )
       }
-   })
+
+      // Default to page 1 until other page clicked on
+      const firstPageButton = paginationHTML.firstElementChild.firstElementChild;
+      let currentPageButton = firstPageButton;
+      currentPageButton.className = 'active';
+
+      paginationHTML.addEventListener('click',(e) => {
+         const clickedPageButton = e.target;
+
+         if( e.target.tagName === 'BUTTON') {
+            const clickedPageNum = e.target.innerHTML;
+            showPage( list, clickedPageNum );
+            
+            currentPageButton.className = '';
+            clickedPageButton.className = 'active';
+            currentPageButton = clickedPageButton;
+         } 
+      })
+   }
 }
 
-
+// Search through given student list based on name. Returns list of students
+// matching search query
 function searchAndFilterNames( listToSearch, searchString ) {
    
    if( (searchString !== '') && (listToSearch.length !== 0) ) {
@@ -108,21 +103,24 @@ function searchAndFilterNames( listToSearch, searchString ) {
    }
 }
 
+// Print search results to page. Print 'no results found' if search comes back empty
 function displaySearchResultsList ( searchResults ) {
-   if(searchResults.length === 0)
-      console.log('No Results Found');
-   
    showPage( searchResults, 1 );
    paginateList( searchResults );
-   
+
+   if( searchResults.length === 0 ) {
+      const listHTML = document.querySelector('.student-list');
+      listHTML.innerHTML= `<h1>No Results Found</h1>`;
+   }
 }
 
 
-// Call functions
-showPage(data, 1);
-paginateList(data);
 
-// Add search bar
+// Calls functions to display page and page buttons
+showPage( data, 1 );
+paginateList( data );
+
+// Adds search bar to search students by name
 const headerTitle = document.querySelector('h2');
 headerTitle.insertAdjacentHTML("afterend",
    `
@@ -137,11 +135,13 @@ headerTitle.insertAdjacentHTML("afterend",
 const searchButton = document.getElementById('search-button');
 const searchInput = document.getElementById('search');
 
+// Search by clicking on search icon
 searchButton.addEventListener('click', () => {
    const searchResults = searchAndFilterNames(data, searchInput.value.toLowerCase() );
    displaySearchResultsList( searchResults );
 })
 
+// Search student list at keyup in search bar
 searchInput.addEventListener('keyup', ()=> {
    const searchResults = searchAndFilterNames(data, searchInput.value.toLowerCase() );
    displaySearchResultsList( searchResults );
